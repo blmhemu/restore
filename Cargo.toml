@@ -1,0 +1,33 @@
+[package]
+name = "restore"
+version = "0.1.0"
+authors = ["Hemanth Bollamreddi <blmhemu@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+warp = "0.3"
+
+# FS
+percent-encoding = "2"
+
+# Tracing
+tracing = "0.1"
+tracing-subscriber = "0.2"
+
+# Futures
+futures = "0.3"
+
+# Serde
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1"
+
+pretty_env_logger = "0.4.0"
+
+bytes = "1"
+
+mpart-async = "0.5"
+
+mime = "0.3"
