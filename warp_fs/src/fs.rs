@@ -112,7 +112,7 @@ fn sanitize_path(base: impl AsRef<Path>, tail: &str) -> Result<PathBuf, Rejectio
     Ok(buf)
 }
 
-fn sanitized_path_filter(
+fn sanitize_tail_filter(
     base: Arc<PathBuf>,
 ) -> impl Filter<Extract = One<PathBuf>, Error = Rejection> + Clone {
     warp::path::tail().and_then(move |tail: warp::path::Tail| {
@@ -123,7 +123,7 @@ fn sanitized_path_filter(
 fn dir_filter(
     base: Arc<PathBuf>,
 ) -> impl Filter<Extract = One<ArcPath>, Error = Rejection> + Clone {
-    sanitized_path_filter(base).and_then(|buf: PathBuf| async {
+    sanitize_tail_filter(base).and_then(|buf: PathBuf| async {
         let is_dir = tokio::fs::metadata(buf.clone())
             .await
             .map(|m| m.is_dir())
@@ -167,7 +167,7 @@ pub fn ls_dir(
 fn new_dir_filter(
     base: Arc<PathBuf>,
 ) -> impl Filter<Extract = One<ArcPath>, Error = Rejection> + Clone {
-    sanitized_path_filter(base).and_then(|buf: PathBuf| async {
+    sanitize_tail_filter(base).and_then(|buf: PathBuf| async {
         let exists = tokio::fs::metadata(buf.clone()).await.is_ok();
 
         if exists {
@@ -211,7 +211,7 @@ pub fn rm_dir(
 fn file_filter(
     base: Arc<PathBuf>,
 ) -> impl Filter<Extract = One<ArcPath>, Error = Rejection> + Clone {
-    sanitized_path_filter(base).and_then(|buf: PathBuf| async {
+    sanitize_tail_filter(base).and_then(|buf: PathBuf| async {
         tokio::fs::metadata(buf.clone())
             .await
             .map(|m| m.is_file())
@@ -222,7 +222,7 @@ fn file_filter(
 fn valid_path_filter(
     base: Arc<PathBuf>,
 ) -> impl Filter<Extract = One<ArcPath>, Error = Rejection> + Clone {
-    sanitized_path_filter(base).and_then(|buf: PathBuf| async {
+    sanitize_tail_filter(base).and_then(|buf: PathBuf| async {
         tokio::fs::metadata(buf.clone())
             .await
             .map_or(Err(reject::not_found()), |_| Ok(ArcPath(Arc::new(buf))))
