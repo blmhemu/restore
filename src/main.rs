@@ -1,6 +1,4 @@
-// #![deny(warnings)]
-
-mod fs;
+#![deny(warnings)]
 
 use warp::Filter;
 
@@ -11,22 +9,22 @@ async fn main() {
         warp::path!("files" / "dl" / ..).and(warp::fs::dir("/Users/hbollamreddi/sfolder"));
 
     let ls_dir_router =
-        warp::path!("files" / "ls" / ..).and(crate::fs::ls_dir("/Users/hbollamreddi/sfolder"));
+        warp::path!("files" / "ls" / ..).and(warp_fs::fs::ls_dir("/Users/hbollamreddi/sfolder"));
 
     let mk_dir_router =
-        warp::path!("files" / "mkdir" / ..).and(crate::fs::mk_dir("/Users/hbollamreddi/sfolder"));
+        warp::path!("files" / "mkdir" / ..).and(warp_fs::fs::mk_dir("/Users/hbollamreddi/sfolder"));
 
     let rm_dir_router =
-        warp::path!("files" / "rmdir" / ..).and(crate::fs::rm_dir("/Users/hbollamreddi/sfolder"));
+        warp::path!("files" / "rmdir" / ..).and(warp_fs::fs::rm_dir("/Users/hbollamreddi/sfolder"));
 
     let rm_file_router =
-        warp::path!("files" / "rm" / ..).and(crate::fs::rm_file("/Users/hbollamreddi/sfolder"));
+        warp::path!("files" / "rm" / ..).and(warp_fs::fs::rm_file("/Users/hbollamreddi/sfolder"));
 
     let mv_path_router =
-        warp::path!("files" / "mv" / ..).and(crate::fs::mv_path("/Users/hbollamreddi/sfolder"));
+        warp::path!("files" / "mv" / ..).and(warp_fs::fs::mv_path("/Users/hbollamreddi/sfolder"));
 
     // Limit is 50 GB.
-    let up_file_router = warp::path!("files" / "up" / ..).and(crate::fs::up_file(
+    let up_file_router = warp::path!("files" / "up" / ..).and(warp_fs::fs::up_file(
         "/Users/hbollamreddi/sfolder",
         53687091200,
     ));

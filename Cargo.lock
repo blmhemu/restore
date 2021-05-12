@@ -858,18 +858,10 @@ dependencies = [
 name = "restore"
 version = "0.1.0"
 dependencies = [
- "bytes",
- "futures",
- "mime",
- "mpart-async",
- "percent-encoding",
  "pretty_env_logger",
- "serde",
- "serde_json",
  "tokio",
- "tracing",
- "tracing-subscriber",
  "warp",
+ "warp_fs",
 ]
 
 [[package]]
@@ -1381,6 +1373,23 @@ dependencies = [
  "tokio-util",
  "tower-service",
  "tracing",
+]
+
+[[package]]
+name = "warp_fs"
+version = "0.1.0"
+dependencies = [
+ "bytes",
+ "futures",
+ "mime",
+ "mpart-async",
+ "percent-encoding",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+ "warp",
 ]
 
 [[package]]
