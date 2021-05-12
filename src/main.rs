@@ -33,8 +33,10 @@ async fn main() {
         warp::path!("files" / "mv" / ..).and(warp_fs::fs::mv_path(config.serve_path.clone()));
 
     // Limit is 50 GB.
-    let up_file_router = warp::path!("files" / "up" / ..)
-        .and(warp_fs::fs::up_file(config.serve_path.clone(), 53687091200));
+    let up_file_router = warp::path!("files" / "up" / ..).and(warp_fs::fs::up_file(
+        config.serve_path.clone(),
+        config.upload_limit,
+    ));
 
     let routes = dl_dir_router
         .or(ls_dir_router)
