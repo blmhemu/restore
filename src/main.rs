@@ -2,12 +2,13 @@
 
 mod config;
 
+use crate::config::Config;
 use warp::Filter;
 
 #[tokio::main]
 async fn main() {
     pretty_env_logger::init();
-    let config = config::get_config().await;
+    let config = Config::new(std::env::args()).await;
     if config.is_none() {
         return;
     }

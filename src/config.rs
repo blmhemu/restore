@@ -1,5 +1,5 @@
 use serde::Deserialize;
-use std::env;
+use std::env::Args;
 use std::path::PathBuf;
 
 #[derive(Deserialize, Debug)]
@@ -8,31 +8,29 @@ pub(crate) struct Config {
     pub(crate) upload_limit: u64,
 }
 
-fn print_cli_help() {
-    println!("Usage: restore -config path_to_config.toml");
-}
-
-pub(crate) async fn get_config() -> Option<Config> {
-    let args: Vec<String> = env::args().collect();
-    match (args.len(), args[1].as_str()) {
-        (3, "-config") => tokio::fs::read_to_string(&args[2]).await.map_or_else(
-            |_| {
-                println!("Error reading file");
+impl Config {
+    pub(crate) async fn new(mut args: Args) -> Option<Self> {
+        args.next();
+        match args.next() {
+            Some(config_file) => tokio::fs::read_to_string(config_file).await.map_or_else(
+                |_| {
+                    eprintln!("Check if the config file exists and is readable.");
+                    None
+                },
+                |config_str| {
+                    toml::from_str(&config_str).map_or_else(
+                        |_| {
+                            eprintln!("Check if the config file is of the recommended format.");
+                            None
+                        },
+                        |config| Some(config),
+                    )
+                },
+            ),
+            _ => {
+                eprintln!("Usage: restore path_to_config.toml");
                 None
-            },
-            |config_str| {
-                toml::from_str(&config_str).map_or_else(
-                    |_| {
-                        println!("Error parsing file");
-                        None
-                    },
-                    |config| Some(config),
-                )
-            },
-        ),
-        _ => {
-            print_cli_help();
-            None
+            }
         }
     }
 }
