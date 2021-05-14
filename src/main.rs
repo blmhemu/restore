@@ -13,28 +13,28 @@ async fn main() {
         return;
     }
     let config = config.unwrap();
+    let serve_path = config.serve_path;
 
-    let dl_dir_router =
-        warp::path!("files" / "dl" / ..).and(warp::fs::dir(config.serve_path.clone()));
+    let dl_dir_router = warp::path!("files" / "dl" / ..).and(warp::fs::dir(serve_path.clone()));
 
     let ls_dir_router =
-        warp::path!("files" / "ls" / ..).and(warp_fs::fs::ls_dir(config.serve_path.clone()));
+        warp::path!("files" / "ls" / ..).and(warp_fs::fs::ls_dir(serve_path.clone()));
 
     let mk_dir_router =
-        warp::path!("files" / "mkdir" / ..).and(warp_fs::fs::mk_dir(config.serve_path.clone()));
+        warp::path!("files" / "mkdir" / ..).and(warp_fs::fs::mk_dir(serve_path.clone()));
 
     let rm_dir_router =
-        warp::path!("files" / "rmdir" / ..).and(warp_fs::fs::rm_dir(config.serve_path.clone()));
+        warp::path!("files" / "rmdir" / ..).and(warp_fs::fs::rm_dir(serve_path.clone()));
 
     let rm_file_router =
-        warp::path!("files" / "rm" / ..).and(warp_fs::fs::rm_file(config.serve_path.clone()));
+        warp::path!("files" / "rm" / ..).and(warp_fs::fs::rm_file(serve_path.clone()));
 
     let mv_path_router =
-        warp::path!("files" / "mv" / ..).and(warp_fs::fs::mv_path(config.serve_path.clone()));
+        warp::path!("files" / "mv" / ..).and(warp_fs::fs::mv_path(serve_path.clone()));
 
     // Limit is 50 GB.
     let up_file_router = warp::path!("files" / "up" / ..).and(warp_fs::fs::up_file(
-        config.serve_path.clone(),
+        serve_path.clone(),
         config.upload_limit,
     ));
 
