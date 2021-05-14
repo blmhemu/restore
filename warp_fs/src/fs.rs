@@ -38,7 +38,7 @@ impl AsRef<Path> for ArcPath {
 #[derive(Serialize, Deserialize, Clone, Debug)]
 struct DirEntries(Vec<Entry>);
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 #[serde(tag = "type", rename_all = "lowercase")]
 pub enum Entry {
     File {
