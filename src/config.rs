@@ -27,7 +27,7 @@ impl Config {
                     )
                 },
             ),
-            _ => {
+            None => {
                 eprintln!("Usage: restore path_to_config.toml");
                 None
             }
